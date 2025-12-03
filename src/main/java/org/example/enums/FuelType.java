@@ -1,12 +1,9 @@
 package org.example.enums;
 
 public enum FuelType {
-    // Fossil Fuels
     PETROL("Gasoline"),
     DIESEL("Diesel"),
     LPG("Liquefied Petroleum Gas (LPG)"),
-
-    // New Generation and Alternative Fuels
     ELECTRIC("Electric"),
     HYBRID("Hybrid (Petrol/Electric)"),
     PHEV("Plug-in Hybrid Electric Vehicle (PHEV)"),
