@@ -1,9 +1,6 @@
 package org.example.model;
 
-import org.example.enums.CarBrand;
-import org.example.enums.CarModel;
-import org.example.enums.SaleStatus;
-import org.example.enums.TransmissionType;
+import org.example.enums.*;
 
 public class Car {
     private Long id;
@@ -13,10 +10,11 @@ public class Car {
     private Integer year;
     private String color;
     private Double kilometersDriven;
+    private FuelType fuelType;
     private Double price;
     private SaleStatus saleStatus;
 
-    public Car(Long id, TransmissionType transmissionType, CarBrand brand, CarModel model, Integer year, String color, Double kilometersDriven, Double price, SaleStatus saleStatus) {
+    public Car(Long id, TransmissionType transmissionType, CarBrand brand, CarModel model, Integer year, String color, Double kilometersDriven, FuelType fuelType, Double price, SaleStatus saleStatus) {
         this.id = id;
         this.transmissionType = transmissionType;
         this.brand = brand;
@@ -24,8 +22,17 @@ public class Car {
         this.year = year;
         this.color = color;
         this.kilometersDriven = kilometersDriven;
+        this.fuelType = fuelType;
         this.price = price;
         this.saleStatus = saleStatus;
+    }
+
+    public FuelType getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(FuelType fuelType) {
+        this.fuelType = fuelType;
     }
 
     public Long getId() {
@@ -110,6 +117,7 @@ public class Car {
                 ", year=" + year +
                 ", color='" + color + '\'' +
                 ", kilometersDriven=" + kilometersDriven +
+                ", fuelType=" + fuelType +
                 ", price=" + price +
                 ", saleStatus=" + saleStatus +
                 '}';
