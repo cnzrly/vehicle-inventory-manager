@@ -9,17 +9,12 @@ public enum TransmissionType {
 
     private final String displayName;
 
-    /**
-     * Constructor: Takes the display name for better user interface representation.
-     * @param displayName The user-friendly name of the transmission type.
-     */
+
     TransmissionType(String displayName) {
         this.displayName = displayName;
     }
 
-    /**
-     * Returns the user-friendly display name of the transmission type.
-     */
+
     public String getDisplayName() {
         return displayName;
     }

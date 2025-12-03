@@ -10,17 +10,12 @@ public enum SaleStatus {
 
     private final String displayName;
 
-    /**
-     * Constructor: Takes the display name for better user interface representation.
-     * @param displayName The user-friendly name of the sale status.
-     */
+
     SaleStatus(String displayName) {
         this.displayName = displayName;
     }
 
-    /**
-     * Returns the user-friendly display name of the sale status.
-     */
+
     public String getDisplayName() {
         return displayName;
     }
