@@ -36,4 +36,16 @@ public interface CarSqlConstants {
                     + "WHERE id = ? RETURNING %s", ALL_COLUMNS_CUSTOMER
     );
     String DELETE_SQL_CUSTOMER = "DELETE FROM customer WHERE id = ?";
+    String ALL_COLUMNS_SALE = "id, carId, customerId, saleDate, carCostPrice, actualSalePrice, discountApplied, paymentMethod, saleNotes";
+    String INSERT_SQL_SALE = "INSERT INTO sales (carId, customerId, saleDate, carCostPrice, actualSalePrice, discountApplied, paymentMethod, saleNotes) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING ALL_COLUMNS_SALE";
+    String FIND_BY_ID_SQL_SALE = String.format(
+            "SELECT %s FROM sales WHERE id = ?", ALL_COLUMNS_SALE
+    );
+    String FIND_ALL_SQL_SALE = String.format(
+            "SELECT %s FROM sales", ALL_COLUMNS_SALE);
+    String UPDATE_SQL_SALE = String.format(
+            "UPDATE sales SET carId=?, customerId=?, saleDate=?, carCostPrice=?, actualSalePrice=?, discountApplied=?, paymentMethod=?, saleNotes=? "
+                    + "WHERE id = ? RETURNING %s", ALL_COLUMNS_SALE
+    );
+    String DELETE_SQL_SALE = "DELETE FROM sales WHERE id = ?";
 }
