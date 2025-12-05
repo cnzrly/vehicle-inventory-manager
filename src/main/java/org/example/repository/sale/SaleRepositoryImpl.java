@@ -1,7 +1,9 @@
+
 package org.example.repository.sale;
 
 import org.example.config.DatabaseConfig;
 import org.example.exception.DatabaseException;
+import org.example.exception.NotFoundException;
 import org.example.model.Sale;
 
 import java.sql.*;
@@ -52,8 +54,9 @@ public class SaleRepositoryImpl implements SaleRepository {
 
     @Override
     public Sale save(Sale sale) {
-        try (Connection conn = databaseConfig.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(INSERT_SQL_SALE);
+
+        try (Connection conn = databaseConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(INSERT_SQL_SALE)) {
             setSaleParameters(ps, sale);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -63,14 +66,16 @@ public class SaleRepositoryImpl implements SaleRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error saving sale :", e);
+
+            throw new DatabaseException("Error saving sale :" + e.getMessage());
         }
     }
 
     @Override
     public Optional<Sale> findById(Long id) {
-        try (Connection conn = databaseConfig.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(FIND_BY_ID_SQL_SALE);
+
+        try (Connection conn = databaseConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(FIND_BY_ID_SQL_SALE)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -85,9 +90,10 @@ public class SaleRepositoryImpl implements SaleRepository {
 
     @Override
     public List<Sale> findAll() {
+
         List<Sale> sales = new ArrayList<>();
-        try (Connection conn = databaseConfig.getConnection()) {
-            Statement stmt = conn.createStatement();
+        try (Connection conn = databaseConfig.getConnection();
+             Statement stmt = conn.createStatement()) {
             ResultSet rs = stmt.executeQuery(FIND_ALL_SQL_SALE);
             while (rs.next()) {
                 sales.add(mapResultSetToSale(rs));
@@ -104,15 +110,17 @@ public class SaleRepositoryImpl implements SaleRepository {
         if (sale.getId() == null) {
             throw new DatabaseException("Cannot update sale: ID is required.");
         }
-        try (Connection conn = databaseConfig.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(UPDATE_SQL_SALE);
+
+        try (Connection conn = databaseConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(UPDATE_SQL_SALE)) {
             int nextIndex = setSaleParameters(ps, sale);
             ps.setLong(nextIndex, sale.getId());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return mapResultSetToSale(rs);
                 } else {
-                    throw new DatabaseException("Failed to update customer, no data returned.");
+
+                    throw new NotFoundException("Sale not found with ID: " + sale.getId() + " for update.");
                 }
             }
         } catch (SQLException e) {
@@ -122,12 +130,13 @@ public class SaleRepositoryImpl implements SaleRepository {
 
     @Override
     public void deleteById(Long id) {
-        try (Connection conn = databaseConfig.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(DELETE_SQL_SALE);
+        try (Connection conn = databaseConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(DELETE_SQL_SALE)) {
             ps.setLong(1, id);
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
-                throw new DatabaseException("No sale found with ID: " + id + " to delete.");
+
+                throw new NotFoundException("No sale found with ID: " + id + " to delete.");
             }
         } catch (SQLException e) {
             throw new DatabaseException("Error deleting sale by ID: " + id + ". Error:" + e.getMessage());

@@ -1,3 +1,4 @@
+// DÜZELTİLMİŞ CarSqlConstants.java
 package org.example.util;
 
 
@@ -20,9 +21,10 @@ public interface CarSqlConstants {
     );
     String DELETE_SQL_CAR = "DELETE FROM cars WHERE id = ?";
 
-    String ALL_COLUMNS_CUSTOMER = "id, firstName, lastName, phoneNumber, secondaryPhoneNumber, email, city, zipCode, address, dateOfBirth, drivenLicenseNumber";
+    // Düzeltildi: driverLicenseNumber, UPDATE tablo adı, DELETE tablo adı
+    String ALL_COLUMNS_CUSTOMER = "id, firstName, lastName, phoneNumber, secondaryPhoneNumber, email, city, zipCode, address, dateOfBirth, driverLicenseNumber";
     String INSERT_SQL_CUSTOMER = String.format(
-            "INSERT INTO customers (firstName, lastName, phoneNumber, secondaryPhoneNumber, email, city, zipCode, address, dateOfBirth, drivenLicenseNumber) " +
+            "INSERT INTO customers (firstName, lastName, phoneNumber, secondaryPhoneNumber, email, city, zipCode, address, dateOfBirth, driverLicenseNumber) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING %s", ALL_COLUMNS_CUSTOMER
     );
     String FIND_BY_ID_SQL_CUSTOMER = String.format(
@@ -32,12 +34,16 @@ public interface CarSqlConstants {
             "SELECT %s FROM customers", ALL_COLUMNS_CUSTOMER
     );
     String UPDATE_SQL_CUSTOMER = String.format(
-            "UPDATE cars SET firstName=?, lastName=?, phoneNumber=?, secondaryPhoneNumber=?, email=?, city=?, zipCode=?, address=?, dateOfBirth=?, drivenLicenseNumber=? "
+            "UPDATE customers SET firstName=?, lastName=?, phoneNumber=?, secondaryPhoneNumber=?, email=?, city=?, zipCode=?, address=?, dateOfBirth=?, driverLicenseNumber=? "
                     + "WHERE id = ? RETURNING %s", ALL_COLUMNS_CUSTOMER
     );
-    String DELETE_SQL_CUSTOMER = "DELETE FROM customer WHERE id = ?";
+    String DELETE_SQL_CUSTOMER = "DELETE FROM customers WHERE id = ?";
+
+
     String ALL_COLUMNS_SALE = "id, carId, customerId, saleDate, carCostPrice, actualSalePrice, discountApplied, paymentMethod, saleNotes";
-    String INSERT_SQL_SALE = "INSERT INTO sales (carId, customerId, saleDate, carCostPrice, actualSalePrice, discountApplied, paymentMethod, saleNotes) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING ALL_COLUMNS_SALE";
+    String INSERT_SQL_SALE = String.format(
+            "INSERT INTO sales (carId, customerId, saleDate, carCostPrice, actualSalePrice, discountApplied, paymentMethod, saleNotes) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING %s", ALL_COLUMNS_SALE
+    );
     String FIND_BY_ID_SQL_SALE = String.format(
             "SELECT %s FROM sales WHERE id = ?", ALL_COLUMNS_SALE
     );

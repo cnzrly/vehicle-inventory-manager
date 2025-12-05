@@ -1,8 +1,10 @@
+
 package org.example.repository.customer;
 
 import org.example.config.DatabaseConfig;
 import org.example.enums.City;
 import org.example.exception.DatabaseException;
+import org.example.exception.NotFoundException;
 import org.example.model.Customer;
 
 import java.sql.*;
@@ -20,6 +22,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     private Customer mapResultSetToCustomer(ResultSet rs) throws SQLException {
+
         return Customer.builder()
                 .id(rs.getLong("id"))
                 .firstName(rs.getString("firstName"))
@@ -36,13 +39,14 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     private int setCustomerParameters(PreparedStatement ps, Customer customer) throws SQLException {
+
         ps.setString(1, customer.getFirstName());
         ps.setString(2, customer.getLastName());
         ps.setString(3, customer.getPhoneNumber());
         ps.setString(4, customer.getSecondaryPhoneNumber());
         ps.setString(5, customer.getEmail());
-        ps.setString(6, customer.getCity().getDisplayName());
-        ps.setString(7, customer.getZipCode().getPostalCode());
+        ps.setString(6, customer.getCity().name());
+        ps.setString(7, customer.getZipCode().name());
         ps.setString(8, customer.getAddress());
         ps.setDate(9, Date.valueOf(customer.getDateOfBirth()));
         ps.setString(10, customer.getDriverLicenseNumber());
@@ -51,8 +55,9 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public Customer save(Customer customer) {
-        try (Connection conn = databaseConfig.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(INSERT_SQL_CUSTOMER);
+
+        try (Connection conn = databaseConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(INSERT_SQL_CUSTOMER)) {
             setCustomerParameters(ps, customer);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -68,8 +73,9 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public Optional<Customer> findById(Long id) {
-        try (Connection conn = databaseConfig.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(FIND_BY_ID_SQL_CUSTOMER);
+
+        try (Connection conn = databaseConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(FIND_BY_ID_SQL_CUSTOMER)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -84,9 +90,10 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public List<Customer> findAll() {
+
         List<Customer> customers = new ArrayList<>();
-        try (Connection conn = databaseConfig.getConnection()) {
-            Statement stmt = conn.createStatement();
+        try (Connection conn = databaseConfig.getConnection();
+             Statement stmt = conn.createStatement()) {
             ResultSet rs = stmt.executeQuery(FIND_ALL_SQL_CUSTOMER);
             while (rs.next()) {
                 customers.add(mapResultSetToCustomer(rs));
@@ -100,17 +107,19 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     @Override
     public Customer update(Customer customer) {
         if (customer.getId() == null) {
-            throw new DatabaseException("Cannot update car: ID is required.");
+            throw new DatabaseException("Cannot update customer: ID is required.");
         }
-        try (Connection conn = databaseConfig.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(UPDATE_SQL_CUSTOMER);
+
+        try (Connection conn = databaseConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(UPDATE_SQL_CUSTOMER)) {
             int nextIndex = setCustomerParameters(ps, customer);
             ps.setLong(nextIndex, customer.getId());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return mapResultSetToCustomer(rs);
                 } else {
-                    throw new DatabaseException("Failed to update customer, no data returned.");
+
+                    throw new NotFoundException("Customer not found with ID: " + customer.getId() + " for update.");
                 }
             }
         } catch (SQLException e) {
@@ -120,12 +129,14 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public void deleteById(Long id) {
-        try (Connection conn = databaseConfig.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(DELETE_SQL_CUSTOMER);
+
+        try (Connection conn = databaseConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(DELETE_SQL_CUSTOMER)) {
             ps.setLong(1, id);
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
-                throw new DatabaseException("No customer found with ID: " + id + " to delete.");
+
+                throw new NotFoundException("No customer found with ID: " + id + " to delete.");
             }
         } catch (SQLException e) {
             throw new DatabaseException("Error deleting customer with ID: " + id + ". Error: " + e.getMessage());
