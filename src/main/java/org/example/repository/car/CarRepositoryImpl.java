@@ -20,7 +20,7 @@ public class CarRepositoryImpl implements CarRepository {
     public CarRepositoryImpl(DatabaseConfig databaseConfig) {
         this.databaseConfig = databaseConfig;
     }
-
+  //--------------------------------------------------------------------------------------------------------------------//
     private Car mapResultSetToCar(ResultSet rs) throws SQLException {
 
         return Car.builder()
@@ -37,7 +37,7 @@ public class CarRepositoryImpl implements CarRepository {
                 .saleStatus(SaleStatus.valueOf(rs.getString("saleStatus")))
                 .build();
     }
-
+    //--------------------------------------------------------------------------------------------------------------------//
     private int setCarParameters(PreparedStatement ps, Car car) throws SQLException {
         ps.setString(1, car.getBrand().name());
         ps.setString(2, car.getModel().name());
@@ -51,13 +51,13 @@ public class CarRepositoryImpl implements CarRepository {
         ps.setString(10, car.getSaleStatus().name());
         return 11;
     }
-
+    //--------------------------------------------------------------------------------------------------------------------//
 
 
     @Override
     public Car save(Car car) {
         try (Connection conn = databaseConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(INSERT_SQL)) {
+             PreparedStatement ps = conn.prepareStatement(INSERT_SQL_CAR)) {
 
             setCarParameters(ps, car);
 
@@ -76,7 +76,7 @@ public class CarRepositoryImpl implements CarRepository {
     @Override
     public Optional<Car> findById(Long id) {
         try (Connection conn = databaseConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(FIND_BY_ID_SQL)) {
+             PreparedStatement ps = conn.prepareStatement(FIND_BY_ID_SQL_CAR)) {
 
             ps.setLong(1, id);
 
@@ -96,7 +96,7 @@ public class CarRepositoryImpl implements CarRepository {
         List<Car> cars = new ArrayList<>();
         try (Connection conn = databaseConfig.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(FIND_ALL_SQL)) {
+             ResultSet rs = stmt.executeQuery(FIND_ALL_SQL_CAR)) {
 
             while (rs.next()) {
                 cars.add(mapResultSetToCar(rs));
@@ -114,7 +114,7 @@ public class CarRepositoryImpl implements CarRepository {
         }
 
         try (Connection conn = databaseConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
+             PreparedStatement ps = conn.prepareStatement(UPDATE_SQL_CAR)) {
 
             int nextParamIndex = setCarParameters(ps, car);
             ps.setLong(nextParamIndex, car.getId());
@@ -134,7 +134,7 @@ public class CarRepositoryImpl implements CarRepository {
     @Override
     public void deleteById(Long id) {
         try (Connection conn = databaseConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(DELETE_SQL)) {
+             PreparedStatement ps = conn.prepareStatement(DELETE_SQL_CAR)) {
 
             ps.setLong(1, id);
             int affectedRows = ps.executeUpdate();
