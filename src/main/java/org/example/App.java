@@ -26,5 +26,18 @@ public class App
                 .costPrice(30000.0)
                 .saleStatus(SaleStatus.IN_STOCK) // IN_STOCK
                 .build();
+
+        try {
+            new DatabaseConfig().getConnection();
+            System.out.println("Successfully connected to the database!");
+            
+            // Keep the application running
+            System.out.println("Application is running... (Press Ctrl+C to stop)");
+            while (true) {
+                Thread.sleep(60000); // Sleep for 1 minute
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to connect to the database: " + e.getMessage());
+        }
     }
 }
