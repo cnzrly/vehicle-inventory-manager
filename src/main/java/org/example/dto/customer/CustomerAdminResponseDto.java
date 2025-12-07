@@ -1,14 +1,14 @@
 package org.example.dto.customer;
 
 import java.time.LocalDate;
-
 import org.example.enums.City;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class CustomerRequestDto {
+public class CustomerAdminResponseDto {
+    private Long id;
 
     private String firstName;
     private String lastName;

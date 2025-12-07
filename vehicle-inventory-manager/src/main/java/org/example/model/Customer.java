@@ -1,15 +1,19 @@
-package org.example.dto.customer;
+package org.example.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.example.enums.City;
 
 import java.time.LocalDate;
 
-import org.example.enums.City;
-import lombok.Builder;
-import lombok.Data;
-
 @Data
 @Builder
-public class CustomerRequestDto {
-
+@NoArgsConstructor
+@AllArgsConstructor
+public class Customer {
+    private Long id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -17,8 +21,9 @@ public class CustomerRequestDto {
     private String email;
 
     private City city;
-    private String address;
     private String zipCode;
+    private String address;
+
     private LocalDate dateOfBirth;
     private String driverLicenseNumber;
 }

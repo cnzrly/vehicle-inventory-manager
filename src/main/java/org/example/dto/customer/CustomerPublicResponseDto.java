@@ -1,24 +1,23 @@
 package org.example.dto.customer;
 
-import java.time.LocalDate;
-
-import org.example.enums.City;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.example.enums.City;
+
+import java.time.LocalDate;
 
 @Data
 @Builder
-public class CustomerRequestDto {
-
+@NoArgsConstructor
+@AllArgsConstructor
+public class CustomerPublicResponseDto {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String secondaryPhoneNumber;
-    private String email;
-
     private City city;
     private String address;
     private String zipCode;
     private LocalDate dateOfBirth;
-    private String driverLicenseNumber;
 }
