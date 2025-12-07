@@ -21,7 +21,7 @@ public class Customer {
     private String email;
 
     private City city;
-    private City zipCode;
+    private String zipCode;
     private String address;
 
     private LocalDate dateOfBirth;

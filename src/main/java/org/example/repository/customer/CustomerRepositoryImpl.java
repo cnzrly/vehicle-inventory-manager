@@ -31,7 +31,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                 .secondaryPhoneNumber(rs.getString("secondaryPhoneNumber"))
                 .email(rs.getString("email"))
                 .city(City.valueOf(rs.getString("city")))
-                .zipCode(City.valueOf(rs.getString("zipCode")))
+                .zipCode(rs.getString("zipCode"))
                 .address(rs.getString("address"))
                 .dateOfBirth(rs.getDate("dateOfBirth").toLocalDate())
                 .driverLicenseNumber(rs.getString("driverLicenseNumber"))
@@ -46,7 +46,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         ps.setString(4, customer.getSecondaryPhoneNumber());
         ps.setString(5, customer.getEmail());
         ps.setString(6, customer.getCity().name());
-        ps.setString(7, customer.getZipCode().name());
+        ps.setString(7, customer.getZipCode());
         ps.setString(8, customer.getAddress());
         ps.setDate(9, Date.valueOf(customer.getDateOfBirth()));
         ps.setString(10, customer.getDriverLicenseNumber());
@@ -57,7 +57,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public Customer save(Customer customer) {
 
         try (Connection conn = databaseConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(INSERT_SQL_CUSTOMER)) {
+                PreparedStatement ps = conn.prepareStatement(INSERT_SQL_CUSTOMER)) {
             setCustomerParameters(ps, customer);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -75,7 +75,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public Optional<Customer> findById(Long id) {
 
         try (Connection conn = databaseConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(FIND_BY_ID_SQL_CUSTOMER)) {
+                PreparedStatement ps = conn.prepareStatement(FIND_BY_ID_SQL_CUSTOMER)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -93,7 +93,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
         List<Customer> customers = new ArrayList<>();
         try (Connection conn = databaseConfig.getConnection();
-             Statement stmt = conn.createStatement()) {
+                Statement stmt = conn.createStatement()) {
             ResultSet rs = stmt.executeQuery(FIND_ALL_SQL_CUSTOMER);
             while (rs.next()) {
                 customers.add(mapResultSetToCustomer(rs));
@@ -111,7 +111,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         }
 
         try (Connection conn = databaseConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(UPDATE_SQL_CUSTOMER)) {
+                PreparedStatement ps = conn.prepareStatement(UPDATE_SQL_CUSTOMER)) {
             int nextIndex = setCustomerParameters(ps, customer);
             ps.setLong(nextIndex, customer.getId());
             try (ResultSet rs = ps.executeQuery()) {
@@ -131,7 +131,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public void deleteById(Long id) {
 
         try (Connection conn = databaseConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(DELETE_SQL_CUSTOMER)) {
+                PreparedStatement ps = conn.prepareStatement(DELETE_SQL_CUSTOMER)) {
             ps.setLong(1, id);
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
