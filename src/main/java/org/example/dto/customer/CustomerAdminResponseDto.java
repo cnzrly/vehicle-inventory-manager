@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CustomerResponseDto {
+public class CustomerAdminResponseDto {
     private Long id;
 
     private String firstName;
@@ -18,7 +18,7 @@ public class CustomerResponseDto {
 
     private City city;
     private String address;
-
+    private String zipCode;
     private LocalDate dateOfBirth;
     private String driverLicenseNumber;
 }

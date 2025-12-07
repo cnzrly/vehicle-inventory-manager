@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class SaleResponseDto {
+public class SaleAdminResponseDto {
     private Long id;
 
     private Long carId;

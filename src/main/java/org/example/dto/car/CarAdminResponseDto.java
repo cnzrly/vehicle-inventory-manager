@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CarResponseDto {
+public class CarAdminResponseDto {
     private Long id;
 
     private CarBrand brand;
