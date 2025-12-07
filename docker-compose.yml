@@ -1,0 +1,44 @@
+services:
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/postgres
+      DB_USERNAME: javad
+      DB_PASSWORD: javad123
+    ports:
+      - "8080:8080"
+
+  db:
+    image: postgres:15
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U javad -d postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: javad
+      POSTGRES_PASSWORD: javad123
+    ports:
+      - "5438:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  liquibase:
+    image: liquibase/liquibase:4.27.0
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./src/main/resources/db:/liquibase/db
+    environment:
+      LIQUIBASE_COMMAND_URL: jdbc:postgresql://db:5432/postgres
+      LIQUIBASE_COMMAND_USERNAME: javad
+      LIQUIBASE_COMMAND_PASSWORD: javad123
+      LIQUIBASE_COMMAND_CHANGELOG_FILE: db/changelog/db.changelog-master.yml
+    command: update
+
+volumes:
+  postgres_data:

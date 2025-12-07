@@ -23,9 +23,9 @@ public class DatabaseConfig {
     }
     public Connection getConnection(){
         try{
-            String url = properties.getProperty("db.url");
-            String username = properties.getProperty("db.username");
-            String password = properties.getProperty("db.password");
+            String url = System.getenv("DB_URL") != null ? System.getenv("DB_URL") : properties.getProperty("db.url");
+            String username = System.getenv("DB_USERNAME") != null ? System.getenv("DB_USERNAME") : properties.getProperty("db.username");
+            String password = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : properties.getProperty("db.password");
             return DriverManager.getConnection(url, username, password);
         } catch (SQLException e){
             throw new DatabaseException("Failed to establish database connection. Check connection details and ensure PostgreSQL is running. Error: " + e.getMessage());
