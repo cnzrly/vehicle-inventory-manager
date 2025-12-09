@@ -5,11 +5,15 @@ import org.example.enums.CarModel;
 import org.example.enums.FuelType;
 import org.example.enums.SaleStatus;
 import org.example.enums.TransmissionType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CarAdminResponseDto {
     private Long id;
 
