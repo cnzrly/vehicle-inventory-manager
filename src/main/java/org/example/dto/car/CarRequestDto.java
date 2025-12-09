@@ -4,11 +4,15 @@ import org.example.enums.CarBrand;
 import org.example.enums.CarModel;
 import org.example.enums.FuelType;
 import org.example.enums.TransmissionType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CarRequestDto {
 
     private CarBrand brand;
