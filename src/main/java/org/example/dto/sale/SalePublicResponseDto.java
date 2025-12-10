@@ -15,5 +15,6 @@ public class SalePublicResponseDto {
     private Double discountApplied;
     private String paymentMethod;
     private String saleNotes;
+    private Double finalPricePaid;
 
 }

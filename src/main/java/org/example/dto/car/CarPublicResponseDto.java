@@ -1,7 +1,10 @@
 package org.example.dto.car;
 
+import lombok.Builder;
+import lombok.Data;
 import org.example.enums.*;
-
+@Data
+@Builder
 public class CarPublicResponseDto {
 
     private CarBrand brand;
